@@ -34,7 +34,7 @@ def init(overwrite):
 
 
 @cli.command()
-@click.option('--sides', default=6, type=dice, help='number of dice rolls')
+@click.option('--sides', '-s', default=6, type=dice, help='number of dice rolls')
 def setup(sides):
     """populate database with default data"""
     sides = int(sides)
@@ -50,8 +50,8 @@ def setup(sides):
 
 
 @cli.command()
-@click.option('--name', prompt="Enter your name")
-@click.option('--rolls', default=1, type=click.INT, help='number of rolls')
+@click.option('--name', '-n', prompt="Enter your name", help="your name")
+@click.option('--rolls', '-r', default=1, type=click.INT, help='number of rolls')
 def roll(name, rolls):
     """roll a dice and save result"""
     conn = sqlite3.connect(DATABASE_FILE)
@@ -62,8 +62,11 @@ def roll(name, rolls):
     for i in range(rolls):
         number = random.randint(1, limit)
 
-        announce = click.style('You rolled a ', fg='green') + click.style(str(number), fg='blue', bg='white')
-        click.echo(announce)
+        prompt = ' '.join(
+            click.style('You rolled a', fg='green'),
+            click.style(str(number), fg='blue', bg='white')
+        )
+        click.echo(prompt)
 
         cursor.execute(
             "INSERT INTO rolls(name, number, rolled_at) VALUES (?,?,?)",
