@@ -62,10 +62,10 @@ def roll(name, rolls):
     for i in range(rolls):
         number = random.randint(1, limit)
 
-        prompt = ' '.join(
+        prompt = ' '.join([
             click.style('You rolled a', fg='green'),
             click.style(str(number), fg='blue', bg='white')
-        )
+        ])
         click.echo(prompt)
 
         cursor.execute(
